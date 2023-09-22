@@ -27,17 +27,12 @@ async function formSubmit(e){
           password:e.target.password.value
       }
       
-      const response=await axios.post(`http://localhost:3100/user/login`,details);
-      if(response.status===201){
-          console.log(" login successfull");   
-      }
-      else{
-
-          throw new error('Failed to login');
-      }
+      const response=await axios.post(`http://localhost:3100/user/login`,details);  
+          console.log(response.data.message);   
+      
   }
-  catch(err){
-      console.log(err);
-    //  document.body.innerHTML +=`<div style="color:red;">${err.name}</div>`;
+  catch(err){ 
+      console.log(err.message);
+      document.body.innerHTML +=`<div style="color:red;">${err.message}</div>`;
   }
 }

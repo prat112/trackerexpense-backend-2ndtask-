@@ -1,8 +1,8 @@
 const Sequelize=require('sequelize');
 
-const sequelize=new Sequelize('tracker-expensebackend','root','Karthik@26',{
+const sequelize=new Sequelize('track-expense','root','Karthik@26',{
     dialect:'mysql',
-    host:'localhost'
+    host:'localhost' 
 });
 
 module.exports=sequelize;
