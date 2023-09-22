@@ -18,17 +18,17 @@
             <div class="form signup">
                 <div class="form-content">
                     <header>Signup</header>
-                    <form action="#">
+                    <form id="Data-form">
                         <div class="field input-field">
-                            <input type="text" placeholder="Enter your name" class="name">
+                            <input type="text" placeholder="Enter your name" name="name" required class="name">
                         </div>
 
                         <div class="field input-field">
-                            <input type="email" placeholder="Email" class="input">
+                            <input type="email" placeholder="Enter Email" name="email" required class="input">
                         </div>
 
                         <div class="field input-field">
-                            <input type="password" placeholder="Confirm password" class="password">
+                            <input type="password" placeholder="Enter password" name="password" required class="password">
                             <i class='bx bx-hide eye-icon'></i>
                         </div>
 
@@ -38,13 +38,15 @@
                     </form>
 
                     <div class="form-link">
-                        <span>Already have an account? <a href="#" class="link login-link">Login</a></span>
+                        <span>Already have an account? <a href="./login.html" class="link login-link">Login</a></span>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- JavaScript -->
-        <script src="../public/js/login&signup.js"></script>
+        <script src="../public/js/signup.js"></script>
+        <!-- Axios -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     </body>
 </html>
