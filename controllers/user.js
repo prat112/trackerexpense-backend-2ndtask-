@@ -1,10 +1,21 @@
 const userModel=require('../models/user');
+const bcrypt=require('bcrypt');
 
+function isstringinvalid(string){
+        if(string==undefined||string.length==0){
+            return true;
+        }
+        return false;
+}
 exports.signup=async(req,res,next)=>{
     try{
         const name=req.body.name;
         const email=req.body.email;
         const password=req.body.password;
+        if(isstringinvalid(name)||isstringinvalid(email)||isstringinvalid(password))
+        {
+            return res.status(400).json({err:'Bad parameters.something is missing'});
+        }
         const allData= await userModel.findAll();
         allData.forEach(element => {
            if(element.email===email) 
@@ -12,8 +23,13 @@ exports.signup=async(req,res,next)=>{
                 throw new Error('User already exists');
            }
         });
-        await userModel.create({name:name,email:email,password:password});
-        res.status(201).json({message:'new user created successfully'});
+        const saltrounds=10;
+        bcrypt.hash(password,saltrounds,async(err,hash)=>{
+            console.log(err);
+            await userModel.create({name:name,email:email,password:hash});
+            res.status(201).json({message:'new user created successfully'});
+        })
+        
     }
     catch(err){
         res.status(500).json({err});
@@ -24,34 +40,31 @@ exports.login=async(req,res,next)=>{
     try{
         const email=req.body.email;
         const password=req.body.password;
-        const allData= await userModel.findAll();
-        let loginCheck,passwordWrong,userExists=false;
-        allData.forEach(element => {
-           if(element.email===email&&element.password===password) 
-           {
-                loginCheck=true;
-                userExists=true;
-           }
-           if(element.email===email&&element.password!==password)
-           {
-                passwordWrong=true;
-                userExists=true;
-           }
-        });
-        if(!userExists)
-        {
-            return res.status(404).json({message:'User not found'});
+        if(isstringinvalid(email)||isstringinvalid(password)){
+            return res.status(400).json({err:'Bad parameters.something is missing',success:false});
         }
-        if(passwordWrong)
+        const allData= await userModel.findAll({where:{email:email}});
+        if(allData.length>0)
         {
-            return res.status(401).json({message:'Incorrect password'});
+            bcrypt.compare(password,allData[0].password,(err,result)=>{
+                if(err){
+                    throw new Error('Something wnet wrong');
+                }
+                if(result===true)
+                {
+                    return res.status(201).json({success:true,message:'Login successfull'});
+                }
+                else
+                {
+                    return res.status(400).json({success:false,message:'Incorrect password'});
+                }
+            })
         }
-        if(loginCheck)
-        {
-            return res.status(201).json({message:'Login successfull'});
-        }   
+        else{
+            return res.status(404).json({success:false,message:'User not found'});
+        } 
     }
     catch(err){
-        res.status(500).json({err});
+        res.status(500).json({message:err,success:false,});
     }
 }
