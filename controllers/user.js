@@ -1,5 +1,10 @@
 const userModel=require('../models/user');
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
+
+function generateAcToken(id){
+    return jwt.sign({userId:id},'qR8v3cJkiPMkTyqnTpmHnjDVGHsl1kE1')
+}
 
 function isstringinvalid(string){
         if(string==undefined||string.length==0){
@@ -48,11 +53,11 @@ exports.login=async(req,res,next)=>{
         {
             bcrypt.compare(password,allData[0].password,(err,result)=>{
                 if(err){
-                    throw new Error('Something wnet wrong');
+                    throw new Error('Something went wrong');
                 }
                 if(result===true)
                 {
-                    return res.status(201).json({success:true,message:'Login successfull'});
+                    return res.status(201).json({success:true,message:'Login successfull',token:generateAcToken(allData[0].id)});
                 }
                 else
                 {
