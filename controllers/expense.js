@@ -3,7 +3,7 @@ const expenseModel=require('../models/expense');
 const jwt=require('jsonwebtoken');
 
 function generateAcToken(id){
-    return jwt.sign({userid:id},'qR8v3cJkiPMkTyqnTpmHnjDVGHsl1kE1')
+    return jwt.sign({userid:id},'qwertyuiop123ASDF')
 }
 
 function isstringinvalid(string){
