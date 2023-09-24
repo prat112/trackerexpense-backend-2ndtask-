@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
-const userData = sequelize.define('userSignupData', {
+const userData = sequelize.define('user', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true, 
@@ -21,7 +21,8 @@ const userData = sequelize.define('userSignupData', {
       password: {
         type: Sequelize.STRING,
         allowNull: false,
-      }
+      },
+      ispremiumuser:Sequelize.BOOLEAN
 });
     
   

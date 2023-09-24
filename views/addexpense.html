@@ -9,9 +9,10 @@
     <title>Expense Tracker</title>
 </head>
 <body>
+    <div class="container mx-auto"><button id="razorbtn" class="btn btn-dark text-uppercase float-xxl-end ">Buy Premium</button></div><br><br>
     <div >
     <div class="container mx-auto col-5 border rounded" >
-        <h1 class="title text-center text-uppercase text-warning bg-dark" >Expense Tracker</h1>
+        <h1 class="title text-center text-uppercase text-light bg-primary" >Expense Tracker</h1>
         <form id="expform">
            <label class="form-label" for="expamt">Enter The Expense Amount</label>
            <input class="form-control" id="expamt" name="expamt" type="number" min="0">
@@ -32,6 +33,7 @@
         <ul class="list-group "></ul>
     </div>
 </div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script src="../public/js/addexpense.js"></script>
 </body>

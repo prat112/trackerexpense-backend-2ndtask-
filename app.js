@@ -8,25 +8,31 @@ const app = express();
 
 const User=require('./models/user');
 const Expense=require('./models/expense');
+const Order=require('./models/order');
 
 app.use(cors());
 
 const userRoute=require('./routes/user');
 const expenseRoute=require('./routes/expense');
+const purchaseRoute=require('./routes/purchase');
   
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user',userRoute);
 app.use('/expense',expenseRoute);
+app.use('/purchase',purchaseRoute);
 
-User.hasMany(Expense,{ foreignKey:'userId'});
-Expense.belongsTo(User,{ foreignKey:'userId'});  
+User.hasMany(Expense);
+Expense.belongsTo(User);  
     
+User.hasMany(Order);
+Order.belongsTo(User);  
+
 app.use(errorController.get404);
 
-sequelize
-        .sync()
+sequelize 
+      .sync()
     // .sync({force:true})  
     .then(()=>app.listen(3100))
     .catch(err=>console.log(err));  

@@ -4,7 +4,7 @@ const userauthentication=require('../middlewares/auth');
 
 const router = express.Router();
   
-router.get('/', userauthentication.authenticate , expenseController.getAllExpense);
+router.get('/', userauthentication.authenticate , expenseController.getAllExpense); 
 
 router.post('/add-expense', userauthentication.authenticate, expenseController.postAddExpense);
 

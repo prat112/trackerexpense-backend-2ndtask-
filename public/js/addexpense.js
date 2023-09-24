@@ -1,100 +1,103 @@
-const exForm = document.getElementById('expform');
-const displayList = document.querySelector('.list-group');
-
-exForm.addEventListener('submit', formSubmit);
-
-async function formSubmit(e) {
-  try {
+const exForm=document.getElementById('expform');
+const displayList=document.querySelector('.list-group');
+exForm.addEventListener('submit',formSubmit);
+const razorButton=document.getElementById('razorbtn');
+razorButton.addEventListener('click',paymentfunc);
+ 
+async function formSubmit(e)
+{   try{
     e.preventDefault();
-    const amount = document.getElementById('expamt').value;
-    const description = document.getElementById('desc').value;
-    const category = document.getElementById('sel-list').value;
-    const token = localStorage.getItem('token');
+    const amount=document.getElementById('expamt').value;
+    const description=document.getElementById('desc').value;
+    const category=document.getElementById('sel-list').value;
+    const token=localStorage.getItem('token');
 
-    let myobj = {
-      amount,
-      description,
-      category,
-    };
-
-    // Send a POST request to the server
-    const config = {
-      headers: { Authorization: token },
-    };
-    const response = await axios.post(
-      'http://localhost:3100/expense/add-expense',
-      myobj,
-      config
-    );
-
-    // Check if the response has the expected data structure
-    if (response.data && response.data.newExpenseData) {
-      showExp(response.data.newExpenseData);
-    } else {
-      throw new Error('Invalid response from the server');
+    let myobj={
+      amount,description,category
     }
-  } catch (err) {
-    console.error(err);
-    document.body.innerHTML +=
-      '<h4>Something went wrong. Please try again later.</h4>';
-  }
+        const response=await axios.post("http://localhost:3100/expense/add-expense",myobj,{headers:{"Authorization":token}})
+        showExp(response.data.newExpenseData);
+      
+    }
+    catch(err){
+        document.body.innerHTML=document.body.innerHTML+"<h4>Something went wrong</h4>"    
+        console.log(err)
+    };   
 }
 
-// Function to display expenses
-function showExp(newExpenseData) {
-  // Create a new list item to display the expense
-  const listItem = document.createElement('li');
-  listItem.className = 'list-group-item bg-light';
-  const text = document.createTextNode(
-    `${newExpenseData.amount} - ${newExpenseData.description} - ${newExpenseData.category}`
-  );
-  listItem.appendChild(text);
+window.addEventListener("DOMContentLoaded",async()=>{
+   try{
+    const token=localStorage.getItem('token');
+    const Data=await axios.get("http://localhost:3100/user",{ headers:{"Authorization":token}})
+    if(Data.data.userData.ispremiumuser==true){
+        razorButton.parentNode.removeChild(razorButton);
+    }
+    const response=await axios.get("http://localhost:3100/expense",{ headers:{"Authorization":token}})
+    for(var i=0;i<response.data.expenseData.length;i++)
+        showExp(response.data.expenseData[i]);
+    }
+    catch(error){
+        console.log(error)
+    };
+})
 
-  // Create a delete button
-  const deleteButton = document.createElement('button');
-  deleteButton.className = 'btn btn-danger btn-sm float-end delete';
-  deleteButton.textContent = 'Delete';
-  listItem.appendChild(deleteButton);
+async function showExp(myobj)
+{
+    try{
+        const addNewelem=document.createElement('li');
+    addNewelem.className="list-group-item bg-light";
+    const text=document.createTextNode(myobj.amount+"-"+myobj.description+"-"+myobj.category);
+    addNewelem.appendChild(text);
 
-  displayList.appendChild(listItem);
+    const deletebtn=document.createElement('button');
+    deletebtn.className='btn btn-danger btn-sm float-end delete'
+    deletebtn.appendChild(document.createTextNode('Delete'));
+    addNewelem.appendChild(deletebtn);
 
-  // Add event listener to the delete button
-  deleteButton.addEventListener('click', async function () {
-    try {
-      const token = localStorage.getItem('token');
-      const expenseId = newExpenseData.id;
+    displayList.appendChild(addNewelem);
 
-      // Send a DELETE request to delete the expense
-      await axios.delete(
-        `http://localhost:3100/expense/delete-expense/${expenseId}`,
-        {
-          headers: { Authorization: token },
+    deletebtn.addEventListener('click',async function(){
+        try{
+            const token=localStorage.getItem('token');
+            const dId=myobj.id;
+            await axios.delete(`http://localhost:3100/expense/delete-expense/${dId}`,{headers:{"Authorization":token}})
+                displayList.removeChild(addNewelem);
         }
-      );
-
-      // Remove the list item from the display
-      displayList.removeChild(listItem);
-    } catch (err) {
-      console.error(err);
+        catch(err){
+            console.log(err)
+        };     
+    })
     }
-  });
+    catch(error){
+        console.log(error)
+    };
 }
 
-// Add an event listener to run code when the DOM is loaded
-document.addEventListener('DOMContentLoaded', async function () {
-  try {
-    const token = localStorage.getItem('token');
+async function paymentfunc(e){
+    const token=localStorage.getItem('token');
+    const response=await axios.get(`http://localhost:3100/purchase/premiummembership`,{headers:{"Authorization":token}});
+    var options={
+        "key":response.data.key_id,
+        "order_id":response.data.order.id,
+        "handler":async function(response){
+            await axios.post(`http://localhost:3100/purchase/updatetrstatus`,{
+            order_id:options.order_id,
+            payment_id:response.razorpay_payment_id},
+            {headers:{"Authorization":token}})
+            alert('You are a Premium User Now');
+            razorButton.parentNode.removeChild(razorButton);
+        }
+    };
+    const rzp1=new Razorpay(options);
+    rzp1.open();
+    e.preventDefault();
 
-    // Send a GET request to fetch expenses
-    const response = await axios.get('http://localhost:3100/expense', {
-      headers: { Authorization: token },
-    });
+    rzp1.on('payment.failed',async function(response){
+            await axios.post(`http://localhost:3100/purchase/updatetrstatus`,{
+            order_id:options.order_id,
+            payment_id:response.razorpay_payment_id},
+            {headers:{"Authorization":token}})
+            alert('Something went wrong');
+    })
 
-    // Display the fetched expenses
-    for (let i = 0; i < response.data.expenseData.length; i++) {
-      showExp(response.data.expenseData[i]);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
+}
