@@ -15,6 +15,7 @@ app.use(cors());
 const userRoute=require('./routes/user');
 const expenseRoute=require('./routes/expense');
 const purchaseRoute=require('./routes/purchase');
+const premiumRoute=require('./routes/premium');
   
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/user',userRoute);
 app.use('/expense',expenseRoute);
 app.use('/purchase',purchaseRoute);
+app.use('/premium',premiumRoute);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);  
