@@ -32,7 +32,7 @@ User.hasMany(Order);
 Order.belongsTo(User);  
 
 app.use(errorController.get404);
-
+ 
 sequelize 
       .sync()
     // .sync({force:true})  

@@ -1,5 +1,6 @@
 const { error } = require('console');
-const userModel=require('../models/signup');
+const userModel = require('../models/signup');
+
 const path=require('path');
 
 exports.postAddUser=async(req,res,next)=>{

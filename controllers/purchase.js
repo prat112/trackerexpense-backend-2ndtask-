@@ -1,6 +1,11 @@
 const Razorpay=require('razorpay');
 const order=require('../models/order');
+const jwt=require('jsonwebtoken');
 require('dotenv').config();
+
+function generateAcToken(id,name,ispremiumuser){
+    return jwt.sign({userId:id,name:name,ispremiumuser},'qwertyuiop123ASDF')
+}
 
 exports.purchasepremium=async(req,res,next)=>{
     try{
@@ -38,16 +43,14 @@ exports.updateTransactionStatus=async(req,res,next)=>{
                     await data.update({status:'FAILED'});
                     return res.status(202).json({success:false,message:"Transaction unsuccessfull"});
                 }
+                const userId=req.user.id;
                 const {payment_id,order_id}=req.body;
                 const data= await order.findOne({where:{orderid:order_id}});
                 const p1= await data.update({paymentid:payment_id,status:'SUCCESSFULL'});
                 const p2=await req.user.update({ispremiumuser:true});
 
-                Promise.all([p1,p2])
-                .then(()=>{
-                    return res.status(202).json({success:true,message:"Transaction successfull"});
-                })
-                .catch(err=>{throw new Error(err);})
+                await Promise.all([p1,p2])
+                return res.status(202).json({success:true,message:"Transaction successfull",token:generateAcToken(userId,undefined,true)});
         }   
         catch(err){
             console.log(err);

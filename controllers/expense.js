@@ -1,5 +1,6 @@
 const { where } = require('sequelize');
 const expenseModel=require('../models/expense');
+const userModel=require('../models/user');
 const jwt=require('jsonwebtoken');
 
 
@@ -29,8 +30,13 @@ exports.postAddExpense=async(req, res, next)=>{
         {
             return res.status(400).json({err:'Bad parameters.something is missing'});
         }
-       const data= await expenseModel.create({amount:amount,description:desc,category:category,userId:req.user.id});
-       res.status(201).json({newExpenseData:data,success:true,});
+        const upuser=await userModel.findByPk(req.user.id);
+        if(upuser.totalexpense==null){
+            upuser.totalexpense=0;
+        }
+        await userModel.update({totalexpense:upuser.totalexpense + +amount},{where:{id:req.user.id}});
+        const data= await expenseModel.create({amount:amount,description:desc,category:category,userId:req.user.id});
+        res.status(201).json({newExpenseData:data,success:true,});
     }
     catch(err){
         console.log(err); 
@@ -42,8 +48,10 @@ exports.postAddExpense=async(req, res, next)=>{
 exports.postDeleteExpense=async(req,res,next)=>{
     try{
         const uId=req.params.id;
-       const userDetails=await expenseModel.findAll({where:{id:uId}});
-       if(req.user.id===userDetails[0].userId){
+        const expenseDetails=await expenseModel.findAll({where:{id:uId}});
+        const upuser=await userModel.findByPk(req.user.id);
+       if(req.user.id===expenseDetails[0].userId){
+            await userModel.update({totalexpense:upuser.totalexpense - +expenseDetails[0].amount},{where:{id:req.user.id}});
             await expenseModel.destroy({where:{id:uId}});
             res.sendStatus(200);  
        } 

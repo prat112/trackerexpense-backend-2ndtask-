@@ -5,38 +5,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <title>Expense Tracker</title>
 </head>
 <body>
-    <div class="container mx-auto">
-        <button id="razorbtn" class="btn btn-dark text-uppercase float-xxl-end">Buy Premium</button>
-        <button id="lBoard" class="btn btn-primary">Leaderboard</button>
-    </div>
-    
-    <div class="container mx-auto col-5 border rounded">
-        <h1 class="title text-center text-uppercase text-light bg-primary">Expense Tracker</h1>
+    <div>
+    <div class="container mx-auto"><button id="razorbtn" style="display: none;" class="btn btn-dark text-uppercase float-xxl-end ">Buy Premium</button></div><br><br>
+    <div id="premiumuser" style="display: none;margin-right: 50px;" >
+        <div class="mx-auto"><button id="lBoard" class="btn btn-outline-info text-uppercase float-xxl-end ">Show Leaderboard</button></div>
+        <div class="mx-auto"><h4 id="preUser" class="text-uppercase btn-outline-dark fw-bold border p-1 rounded float-xxl-end ">premium user</h4></div><br><br>   
+    </div> 
+    <div>
+         <div class="container mx-auto col-5  " >
+        <h1 class="title text-center p-1 rounded text-uppercase text-dark bg-primary" ><i>Add Expense</i></h1>
         <form id="expform">
-            <label class="form-label" for="expamt">Enter The Expense Amount</label>
-            <input class="form-control" id="expamt" name="expamt" type="number" min="0">
-            <label class="form-label" for="desc">Choose Description</label>
-            <input class="form-control" id="desc" name="desc" type="text">
-            <label class="form-label" for="sel-list">Choose a Category</label>
-            <select class="form-control" id="sel-list" name="category">
+           <label class="form-label fs-5 " for="expamt">Enter The Expense Amount</label>
+           <input class="form-control" id="expamt" name="expamt" type="number" min="0">
+           <label class="form-label  fs-5 " for="desc">Choose Description</label>
+           <input class="form-control" id="desc" name="desc" type="text" >
+           <label class="form-label  fs-5" for="sel-list">Choose a Category</label>
+            <select class="form-control fs-5" id="sel-list" name="category"> 
                 <option value="Entertainment">Entertainment</option>
                 <option value="Travelling">Travelling</option>
                 <option value="Grocery">Grocery</option>
                 <option value="Clothing">Clothing</option>
+                <option value="Food">Food</option>
                 <option value="Misc">Misc</option>
-            </select>
-            <button class="btn btn-primary" type="submit" id="subbtn">Add Expense</button><br>
+            </select><br>
+            <button class="btn btn-lg btn-primary border-1 border-dark" type="submit" id="subbtn" >Add Expense</button><br>
         </form><br>
     </div><br>
-    <div class="container mx-auto col-5" id="expTab">
-        <ul class="list-group"></ul>
+    <div class="container mx-auto col-5"  id="expTab" >
+        <ul class="list-group ">
+            <li class="list-group-item text-center fs-4 bg-warning rounded">Expense List</li><br>
+        </ul>
+    </div><br>
+    <div class="container mx-auto col-5"  >
+        <ol class="list-group"  id="Leaderboard">
+            
+        </ol>
     </div>
-    <div id="Leaderboard"></div> <!-- Add a placeholder for the Leaderboard -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    </div>
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script src="../public/js/addexpense.js"></script>
 </body>
 </html>

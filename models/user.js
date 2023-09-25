@@ -22,8 +22,13 @@ const userData = sequelize.define('user', {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      ispremiumuser:Sequelize.BOOLEAN
+      ispremiumuser:Sequelize.BOOLEAN,
+      totalexpense: {
+        type: Sequelize.INTEGER,
+        allowNull: true, // Allow NULL values for totalexpense
+      },
+      
 });
     
   
-  module.exports = userData;
+module.exports = userData;
