@@ -11,6 +11,7 @@
   "author": "Prathiksha",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -21,9 +22,11 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.1",
     "razorpay": "^2.9.2",
-    "sequelize": "^6.33.0"
+    "sequelize": "^6.33.0",
+    "sib-api-v3-sdk": "^8.5.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
-  }
+  },
+  "keywords": []
 }
