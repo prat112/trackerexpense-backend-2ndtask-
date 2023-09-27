@@ -1,53 +1,55 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title> Login Page </title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Login Page </title>
 
-        <!-- CSS -->
-        <link rel="stylesheet" href="../public/css/login&signup.css">
-                
-        <!-- Boxicons CSS -->
-        <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-                         
-    </head>
-    <body>
-        <section class="container forms">
-            <div class="form login">
-                <div class="form-content">
-                    <header>Login</header>
-                    <form id="Data-form">
-                        <div class="field input-field">
-                            <input type="email" placeholder="Email" name="email" required class="input">
-                        </div>
+    <!-- CSS -->
+    <link rel="stylesheet" href="../public/css/Style.css">
+            
+    <!-- Boxicons CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+                     
+</head>
+<body>
+    <section class="container forms">
+        <div class="form login">
+            <div class="form-content">
+                <header>Login</header>
+                <form id="Data-form">
+                    <div class="field input-field">
+                        <input type="email" placeholder="Email" name="email" required class="input">
+                    </div>
 
-                        <div class="field input-field">
-                            <input type="password" placeholder="Password" name="password" required class="password">
-                            <i class='bx bx-hide eye-icon'></i>
-                        </div>
-
-                        <div class="form-link">
-                            <a href="#" class="forgot-pass">Forgot password?</a>
-                        </div>
-
-                        <div class="field button-field">
-                            <button>Login</button>
-                        </div>
-                    </form>
+                    <div class="field input-field">
+                        <input type="password" placeholder="Password" name="password" required class="password">
+                        <i class='bx bx-hide eye-icon'></i>
+                    </div>
 
                     <div class="form-link">
-                        <span>Don't have an account? <a href="./signup.html" class="link signup-link">Signup</a></span>
+                        <a href="./forgetpwd.html" class="forgot-pass">Forgot password?</a>
                     </div>
+
+                    <!-- Display the Base64 image -->
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAACQAQMAAADdiHD7AAAABlBMVEUAAABTU1OoaSf/AAAAAXRSTlMAQObYZgAAAFJJREFUeF7t0cENgDAMQ9FwYgxG6WjpaIzCCAxQxVggFuDiCvlLOeRdHR9yzjncHVoq3npu+wQUrUuJHylSTmBaespJyJQoObUeyxDQb3bEm5Au81c0pSCD8HYAAAAASUVORK5CYII=" alt="Sample Image">
+                    
+                    <div class="field button-field">
+                        <button>Login</button>
+                    </div>
+                </form>
+
+                <div class="form-link">
+                    <span>Don't have an account? <a href="./signup.html" class="link signup-link">Signup</a></span>
                 </div>
-
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- JavaScript -->
-        <script src="../public/js/login.js"></script>
-        <!-- Axios -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
-    </body>
+    <!-- JavaScript -->
+    <script src="../public/js/login.js"></script>
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+</body>
 </html>
