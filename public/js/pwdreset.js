@@ -28,11 +28,12 @@ async function formSubmit(e){
         email:email,
         password:confirmpass
       };
-
+      console.log(details);
       if(pass===confirmpass){
         const response=await axios.post(`http://localhost:3100/password/change`,details); 
         console.log(response);
-        window.location.href="http://127.0.0.1:5500/views/login.html";
+        alert("password change successfull");
+        
       }
       else{
         throw new Error('password and confirm password does not match');
