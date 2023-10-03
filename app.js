@@ -10,6 +10,7 @@ const User=require('./models/user');
 const Expense=require('./models/expense');
 const Order=require('./models/order');
 const forgotpassword=require('./models/forgotpwdreq');
+const fileurl=require('./models/fileurl');
 
 app.use(cors());
 
@@ -18,6 +19,7 @@ const expenseRoute=require('./routes/expense');
 const purchaseRoute=require('./routes/purchase');
 const premiumRoute=require('./routes/premium');
 const passwordRoute=require('./routes/password');
+
   
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -28,6 +30,7 @@ app.use('/purchase',purchaseRoute);
 app.use('/premium',premiumRoute);
 app.use('/password',passwordRoute); 
 
+
 User.hasMany(Expense);
 Expense.belongsTo(User);  
     
@@ -37,9 +40,12 @@ Order.belongsTo(User);
 User.hasMany(forgotpassword);
 forgotpassword.belongsTo(User); 
 
+User.hasMany(fileurl);
+fileurl.belongsTo(User); 
+
 app.use(errorController.get404);
 
-sequelize 
+sequelize  
       .sync()
     // .sync({force:true})  
     .then(()=>app.listen(3100))

@@ -1,6 +1,8 @@
 const userModel = require('../models/user');
+const fileModel=require('../models/fileurl');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const AWS=require('aws-sdk');
 
 function generateAcToken(id, name, ispremiumuser) {
   return jwt.sign({ userId: id, name: name, ispremiumuser}, 'qwertyuiop123ASDF');
@@ -83,4 +85,72 @@ catch(err){
   res.status(500).json({error:err,success:false});
 }
 }
+
+exports.getuser=async(req,res,next)=>{
+  try{
+      const data=await userModel.findByPk(req.user.id);
+      res.status(201).json({userData:data,success:true});
+  }
+  catch(err){ 
+      res.status(500).json({error:err,success:false});
+  }
+}
+
+function uploadToS3(data,filename){
+      const BUCKET_NAME=process.env.AWS_BUCKET;
+      const USER_KEY=process.env.AWS_ACCESS_KEY;
+      const USER_SECRET=process.env.AWS_SECRET_KEY;
+
+      let s3bucket=new AWS.S3({
+          accessKeyId:USER_KEY,
+          secretAccessKey:USER_SECRET
+      });
+
+          var params={
+              Bucket:BUCKET_NAME,
+              Key:filename,
+              Body:data,
+              ACL:'public-read'
+          };
+          return new Promise((res,rej)=>{
+              s3bucket.upload(params,(err,response)=>{
+                  if(err){
+                      console.log('something went wrong',err);
+                      rej(err);
+                  }
+                  else{
+                      console.log('success',response);
+                      res(response.Location); 
+                  }
+              })
+          })
+          
+}
+
+exports.download=async(req,res,next)=>{
+  try{
+      const expenses=await req.user.getExpenses();
+      const StrExpenses=JSON.stringify(expenses);
+      const userId=req.user.id;
+      const filename=`Expense${userId}/${new Date()}.txt`;
+      const fileURL= await uploadToS3(StrExpenses,filename);
+      await fileModel.create({url:fileURL,userId:userId});
+      res.status(200).json({fileURL,success:true});
+
+  }
+  catch(err){
+      console.log(err);
+      res.status(500).json({error:err,success:false});
+  }
+}
+
+exports.getDownloadHistory=async(req, res, next)=>{
+  try{
+      const data=await fileModel.findAll({where:{userId:req.user.id}});
+      res.status(201).json({downloadData:data,success:true});
+  }
+  catch(err){ 
+      res.status(500).json({error:err,success:false});
+  }   
+}; 
 
