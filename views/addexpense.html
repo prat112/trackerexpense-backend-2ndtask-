@@ -50,10 +50,16 @@
         <ul class="list-group ">
             <li class="list-group-item text-center fs-3 bg-warning rounded">Expense List</li>
         </ul>
+        <div id="page"></div>
+        <form id="itemsperpageform">
+            <label class=" " for="itemsperpage">Items per page</label>
+            <input class="" id="itemsperpage" name="itemsperpage" type="number" min="0">
+            <button class="btn border-1 border-dark" type="submit" >submit</button><br>
+        </form>
     </div><br>
     <div id="urlTab" >
-        <ul id="urlhistory" class="list-group ">
-            <li class="list-group-item text-center fs-4 bg-dark text-light rounded">Download history</li><br>
+        <ul style="display: none;" id="urlhistory" class="list-group ">
+            <li  class="list-group-item text-center fs-4 bg-dark text-light rounded">Download history</li><br>
         </ul>
     </div></div><br>
     <div class="offset-1 col-6"  >

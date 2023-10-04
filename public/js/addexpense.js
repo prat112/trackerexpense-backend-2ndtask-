@@ -7,11 +7,23 @@ const lBoardbutton=document.getElementById('lBoard');
 const leaderBoard=document.getElementById('Leaderboard');
 const downloadbtn=document.getElementById('Downbtn');
 const historyList=document.getElementById('urlhistory');
+const pagination=document.getElementById('page');
+const itemsform=document.getElementById('itemsperpageform');
+var size=5;
+var page=1;
 
 exForm.addEventListener('submit',formSubmit);
 razorButton.addEventListener('click',paymentfunc);
 lBoardbutton.addEventListener('click',showleaderBoard);
 downloadbtn.addEventListener('click',download);
+itemsform.addEventListener('submit',itemsSetup);
+
+function itemsSetup(e){
+    e.preventDefault();
+    size=document.getElementById('itemsperpage').value;
+    getExpenses(page,size);
+}
+
 
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
@@ -30,13 +42,16 @@ window.addEventListener("DOMContentLoaded",async()=>{
      const ispremiumuser=decodedtoken.ispremiumuser;
      if(ispremiumuser){
          preUser.style.display='block';
+         historyList.style.display='block';
      }
      else{
         nonpreuser.style.display='block';
      }
-     const response=await axios.get("http://localhost:3100/expense",{ headers:{"Authorization":token}})
+     const response=await axios.get(`http://localhost:3100/expense?page=${page}&size=${size}`,{ headers:{"Authorization":token}})
+
      for(var i=0;i<response.data.expenseData.length;i++)
          showExp(response.data.expenseData[i]);
+         showpagination(response.data);
 
     const history=await axios.get("http://localhost:3100/user/dhistory",{ headers:{"Authorization":token}})
     for(var i=0;i<history.data.downloadData.length;i++)
@@ -129,6 +144,7 @@ async function paymentfunc(e){
             console.log(res);
             alert('You are a Premium User Now');
             preUser.style.display='block';
+            historyList.style.display='block';
             nonpreuser.style.display='none';
             localStorage.setItem('token',res.data.token);
         }
@@ -164,7 +180,7 @@ async function showleaderBoard(){
 
 async function download(){
     try{
-        console.log('clicked dload');
+        
         const token=localStorage.getItem('token');
         const response=await axios.get('http://localhost:3100/user/download', { headers: {"Authorization" : token} });
         if(response.status === 200){
@@ -178,6 +194,69 @@ async function download(){
     }
     catch(err){
         console.log(err);
-        document.body.innerHTML += `<div style="color:red;"> ${err}</div>`
+        exForm.innerHTML += `<div style="color:red;"> ${err}</div>`
     }
 }
+
+function showpagination({
+    size,
+    currentPage,
+    hasNextPage,
+    nextPage,
+    hasPreviousPage,
+    previousPage,
+    lastPage
+}){
+
+    pagination.innerHTML='';
+
+    if(hasPreviousPage){
+        const btn2=document.createElement('button');
+        btn2.innerHTML=previousPage;
+        btn2.addEventListener('click',()=>{getExpenses(previousPage,size)});
+        pagination.appendChild(btn2);
+    }
+    if(currentPage!=lastPage){
+        const btn1=document.createElement('button');
+        btn1.innerHTML=`<h3>${currentPage}</h3>`;
+        btn1.addEventListener('click',()=>{getExpenses(currentPage,size)});
+        pagination.appendChild(btn1);
+    }
+    
+    if(hasNextPage){
+        const btn3=document.createElement('button');
+        btn3.innerHTML=nextPage;
+        btn3.addEventListener('click',()=>{getExpenses(nextPage,size)});
+        pagination.appendChild(btn3);
+        }  
+    if(nextPage!=lastPage){
+        const btn4=document.createElement('button');
+        btn4.innerHTML=lastPage;
+        btn4.addEventListener('click',()=>{getExpenses(lastPage,size)});
+        pagination.appendChild(btn4);
+    }
+         
+    
+           
+}
+
+async function getExpenses(page,size)
+{
+    try{
+        const token=localStorage.getItem('token');
+        const response=await axios.get(`http://localhost:3100/expense?page=${page}&size=${size}`,{ headers:{"Authorization":token}})
+        displayList.innerHTML='';
+
+        const addNewelem=document.createElement('li');
+        addNewelem.className="list-group-item text-center fs-3 bg-warning rounded";
+        const text=document.createTextNode('Expense List');
+        addNewelem.appendChild(text);
+        displayList.appendChild(addNewelem);
+        for(var i=0;i<response.data.expenseData.length;i++)
+         showExp(response.data.expenseData[i]);
+         showpagination(response.data);
+    }
+    catch(error){
+        console.log(error);
+    }
+} 
