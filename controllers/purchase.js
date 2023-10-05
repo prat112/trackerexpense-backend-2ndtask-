@@ -4,14 +4,14 @@ const jwt=require('jsonwebtoken');
 require('dotenv').config();
 
 function generateAcToken(id,name,ispremiumuser){
-    return jwt.sign({userId:id,name:name,ispremiumuser},'qwertyuiop123ASDF')
+    return jwt.sign({userId:id,name:name,ispremiumuser},process.env.TOKEN_SECRET);
 }
 
 exports.purchasepremium=async(req,res,next)=>{
     try{
         var rzp=new Razorpay({
-            key_id:"rzp_test_pt5S0qSPcVVImo",
-            key_secret:"xJko0fPU0el6PJ3DplRFTGvM"
+            key_id:process.env.RAZORPAY_KEY_ID,
+            key_secret:process.env.RAZORPAY_KEY_SECRET
         })
         const amount=2500;
 
