@@ -69,7 +69,7 @@ exports.passwordupdate=async(req, res, next)=>{
                 throw new Error(err);
             }
             await userModel.update({password:hash},{where:{email:email}});
-            res.status(201).json({message:'password updated successfully'});
+            res.status(201).json({message:'password updated successfully'}) ;
         })
         }
         else{
