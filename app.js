@@ -31,7 +31,7 @@ app.use(morgan('combined',{stream:accessLogStream}));
 app.use(cors());
   
 app.use(bodyParser.json({ extended: false }));
-// app.use(express.static(path.join(__dirname, 'public')));
+ //app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user',userRoute);
 app.use('/expense',expenseRoute);

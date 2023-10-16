@@ -40,7 +40,7 @@ exports.passwordreset=async(req, res, next)=>{
         console.log("link",link);
         if(link.isActive){
             await forgetpwdModel.update({isActive:false},{where:{id:uId}});
-            const filePath = path.resolve(__dirname, '..', 'views', 'pwdreset.html');
+            const filePath = path.resolve(__dirname, '..', 'public','html', 'pwdreset.html');
             console.log("File path:", filePath);
             res.status(200).sendFile(filePath);
     } else {
