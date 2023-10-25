@@ -132,7 +132,7 @@ async function showhistory(myobj)
 
 async function paymentfunc(e){
     const token=localStorage.getItem('token');
-    const response=await axios.get(`http://localhost:3100/purchase/premiummembership`,{headers:{"Authorization":token}});
+    const response=await axios.get(`http://localhost/purchase/premiummembership`,{headers:{"Authorization":token}});
     var options={
         "key":response.data.key_id,
         "order_id":response.data.order.id,

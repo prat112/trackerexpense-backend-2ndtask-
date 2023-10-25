@@ -57,11 +57,11 @@ exports.passwordupdate=async(req, res, next)=>{
     try{
         const email=req.body.email;
         const pass=req.body.password;
-       // console.log(pass);
+        console.log(pass);
         const user=await userModel.findOne({where:{email:email}});
         if(user)
         {
-            //console.log(user);
+            console.log(user);
             const saltrounds=10;
             bcrypt.hash(pass,saltrounds,async(err,hash)=>{
             if(err){
@@ -69,7 +69,7 @@ exports.passwordupdate=async(req, res, next)=>{
                 throw new Error(err);
             }
             await userModel.update({password:hash},{where:{email:email}});
-            res.status(201).json({message:'password updated successfully'}) ;
+            res.status(201).json({message:'password updated successfully'});
         })
         }
         else{
