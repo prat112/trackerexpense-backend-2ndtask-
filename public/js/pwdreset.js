@@ -33,6 +33,7 @@ async function formSubmit(e){
         const response=await axios.post(`http://localhost:3100/password/change`,details); 
         console.log(response);
         alert("password change successfull");
+        window.location.href = "login.html";
         
       }
       else{

@@ -37,12 +37,12 @@ exports.passwordreset=async(req, res, next)=>{
     try{
         const uId=req.params.uId;
         const link=await forgetpwdModel.findOne({where:{id:uId}});
-        console.log("link",link);
+       
         if(link.isActive){
             await forgetpwdModel.update({isActive:false},{where:{id:uId}});
             const filePath = path.resolve(__dirname, '..', 'public','html', 'pwdreset.html');
             console.log("File path:", filePath);
-            res.status(200).sendFile(filePath);
+            res.redirect('/html/pwdreset.html')
     } else {
       throw new Error('link already used');
     }

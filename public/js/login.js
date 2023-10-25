@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('token', response.data.token);
   
           console.log('Login successful');
+          window.location.href = 'addexpense.html'; 
         } else {
           console.log('Login failed');
         }
