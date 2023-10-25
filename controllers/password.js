@@ -20,7 +20,7 @@ exports.passwordresetmail=async(req, res, next)=>{
                 'email':`${req.body.email}`
             }],
             'subject':'Reset password of expense app',
-            'textContent':`password reset link: http://localhost:3100/password/resetpassword/${uId}`
+            'textContent':`password reset link: http://54.210.69.239:3100/password/resetpassword/${uId}`
         })
         console.log("final=",final);
         // console.log(req.body.email);

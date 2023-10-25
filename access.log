@@ -578,3 +578,4 @@
 ::1 - - [25/Oct/2023:14:51:58 +0000] "GET /js/addexpense.js HTTP/1.1" 200 9041 "http://localhost:3100/html/addexpense.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
 ::1 - - [25/Oct/2023:14:51:59 +0000] "GET /expense?page=1&size=5 HTTP/1.1" 201 606 "http://localhost:3100/html/addexpense.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
 ::1 - - [25/Oct/2023:14:51:59 +0000] "GET /user/dhistory HTTP/1.1" 201 534 "http://localhost:3100/html/addexpense.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+::1 - - [25/Oct/2023:16:55:46 +0000] "GET /user/signup HTTP/1.1" 404 220 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
