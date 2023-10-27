@@ -35,7 +35,7 @@ app.use(cors(
 ));
   
 app.use(bodyParser.json({ extended: false }));
- //app.use(express.static(path.join(__dirname, 'public')));
+ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user',userRoute);
 app.use('/expense',expenseRoute);
@@ -43,9 +43,9 @@ app.use('/purchase',purchaseRoute);
 app.use('/premium',premiumRoute);
 app.use('/password',passwordRoute); 
 
-app.use((req,res)=>{
-  res.sendFile(path.join(__dirname,`public/${req.url}`));
-});
+// app.use((req,res)=>{
+//   res.sendFile(path.join(__dirname,`public/${req.url}`));
+// });
 
 User.hasMany(Expense);
 Expense.belongsTo(User);  
