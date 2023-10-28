@@ -37,7 +37,7 @@ async function formSubmit(e){
         
       }
       else{
-        throw new Error('password and confirm password does not match');
+        throw new Error('password and confirm password does not match!');
       }  
   }
   catch(err){ 
