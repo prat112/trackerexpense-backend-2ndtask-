@@ -28,20 +28,18 @@ async function formSubmit(e){
         email:email,
         password:confirmpass
       };
-      console.log(details);
+
       if(pass===confirmpass){
-        const response=await axios.post(`http://54.210.69.239:3100/password/change`,details); 
+        const response=await axios.post(`http://localhost:3000/password/change`,details); 
         console.log(response);
-        alert("password change successfull");
-        window.location.href = "login.html";
-        
+        window.location.href="../html/login.html";
       }
       else{
-        throw new Error('password and confirm password does not match!');
+        throw new Error('password and confirm password does not match');
       }  
   }
-  catch(err){ 
+  catch(err){  
       console.log(err.message);
-      document.body.innerHTML +=`<div style="color:red;">${err.message}</div>`;
+      form.innerHTML +=`<div style="color:red;">${err.message}</div>`;
   }
 }

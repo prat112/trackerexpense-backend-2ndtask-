@@ -1,7 +1,7 @@
 const Sib=require('sib-api-v3-sdk');
 require('dotenv').config();
 const uuid=require('uuid');
-const forgetpwdModel=require('../models/forgotpwdreq');
+
 const userModel=require('../models/user');
 const bcrypt=require('bcrypt');
 const path = require('path');
@@ -20,37 +20,44 @@ exports.passwordresetmail=async(req, res, next)=>{
                 'email':`${req.body.email}`
             }],
             'subject':'Reset password of expense app',
-            'textContent':`password reset link: http://54.210.69.239:3100/password/resetpassword/${uId}`
+            'textContent':`password reset link: http://localhost:3000/password/resetpassword?uId=${uId}&email=${req.body.email}`
         })
         console.log("final=",final);
         // console.log(req.body.email);
         const user=await userModel.findOne({where:{email:req.body.email}});
         // console.log(user);
-        await forgetpwdModel.create({id:uId,userId:user.id});
+        user.forgotpwd.push({uniqueId:uId,isActive:true});
+        await user.save();
         res.status(201).json({data:final,success:true});
     }
     catch(err){ 
         res.status(500).json({error:err,success:false});
     }   
 }; 
+
 exports.passwordreset=async(req, res, next)=>{
     try{
         const uId=req.params.uId;
-        const link=await forgetpwdModel.findOne({where:{id:uId}});
-       
-        if(link.isActive){
-            await forgetpwdModel.update({isActive:false},{where:{id:uId}});
-            const filePath = path.resolve(__dirname, '..', 'public','html', 'pwdreset.html');
-            console.log("File path:", filePath);
-            res.redirect('/html/pwdreset.html')
-    } else {
-      throw new Error('link already used');
+        const email=req.query.email;
+        const user=await userModel.findOne({email:email}).populate('forgotpwd');
+        console.log(user);
+        const pwdIndex = user.forgotpwd.findIndex(cp => {
+            return cp.uniqueId.toString() === uId.toString();
+          });
+          if(user.forgotpwd[pwdIndex].isActive){
+            user.forgotpwd[pwdIndex].isActive=false;
+            await user.save();
+            res.status(200).sendFile(path.join(__dirname,'..','public','html','pwdreset.html') );
+          }
+        else{
+                throw new Error('link already used');
+        }
     }
-  } catch (err) {
-    res.status(500).json({ error: err.message, success: false });
-  }
-}
-
+    catch(err){
+        res.status(500).json({error:err.message,success:false});
+    }
+};
+ 
        
 
 exports.passwordupdate=async(req, res, next)=>{
@@ -68,7 +75,8 @@ exports.passwordupdate=async(req, res, next)=>{
                 console.log(err);
                 throw new Error(err);
             }
-            await userModel.update({password:hash},{where:{email:email}});
+            user.password=hash;
+            await user.save();
             res.status(201).json({message:'password updated successfully'});
         })
         }
